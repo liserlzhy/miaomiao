@@ -1,14 +1,13 @@
 <template>
-  <router-view/>
+  <div>Clist...</div>
 </template>
 
 <script>
 export default {
-  name: 'App'
+    name: 'Clist'
 }
 </script>
 
 <style>
-  
-</style>
 
+</style>

@@ -1,14 +1,15 @@
 <template>
-  <router-view/>
+  <div>
+      即将上映...
+  </div>
 </template>
 
 <script>
 export default {
-  name: 'App'
+    name: 'ComingSoon'
 }
 </script>
 
 <style>
-  
-</style>
 
+</style>
