@@ -4,14 +4,15 @@
         <div id="content">
           <div class="movie_menu">
             <router-link tag="div" to="/movie/city" class="city_name">
-              <span>大连</span><i></i>
+              <span>大连</span><i class="iconfont icon-jiantou 
+"></i>
             </router-link>
             <div class="hot_switch">
               <router-link  tag="div" to="/movie/nowPlaying" class="hot_item active">正在热映</router-link>
               <router-link  tag="div" to="/movie/comingSoon" class="hot_item">即将上映</router-link>
             </div>
             <router-link tag="div" to="/movie/search" class="search_entry">
-              <i>搜索</i>
+              <i class="iconfont icon-sousuo"></i>
             </router-link>
           </div>
            <keep-alive>
@@ -49,10 +50,23 @@ export default {
       .hot_item{
         padding: 0 10px;
       }
-      .router-link-active {
+      
+    }
+     .router-link-active {
         color: #e73f3f;
         border-bottom: 2px #e73f3f solid;
+        .icon-jiantou {
+          color: #e73f3f;
+        }
       }
+    .icon-sousuo {
+      font-size: 20px;;
     }
-  }
+    .icon-jiantou {
+      color: #888;
+      font-size: 13px;
+      margin-left: 5px;
+    }
+}
+  
 </style>
