@@ -7,6 +7,8 @@
   }
   html,body{
       height: 100%;
+      overflow: hidden;
+      font-family: Microsoft YaHei,Tahoma,Helvetica,Arial,sans-serif;
   }
   .clearfix:after{
       content:"";
