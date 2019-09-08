@@ -1,19 +1,24 @@
 <template>
   <div class="city-list">
-    <div class="hotCity">
-      <span>热门城市</span>
-      <ul class="clearfix">
-        <li v-for="(item,index) in hotList" :key="index" >{{item.name}}</li>
-      </ul>
-    </div>
-    <div class="sort" ref="letter">
-      <div v-for="(sortCity,index) in cityList" :key="index" >
-        <h2>{{sortCity.index}}</h2>
-        <ul v-for="city in sortCity.list" :key="city.cityId">
-          <li>{{city.name}}</li>
-        </ul>
+    <Loading v-if="isLoading" />
+    <Scroller v-else ref="city_list">
+      <div>
+        <div class="hotCity">
+          <span>热门城市</span>
+          <ul class="clearfix">
+            <li v-for="(item,index) in hotList" :key="index" @tap="handleToCity(item.name,item.cityId)">{{item.name}}</li>
+          </ul>
+        </div>
+        <div class="sort" ref="letter">
+          <div v-for="(sortCity,index) in cityList" :key="index" >
+            <h2>{{sortCity.index}}</h2>
+            <ul v-for="city in sortCity.list" :key="city.cityId">
+              <li @tap="handleToCity(city.name,city.cityId)">{{city.name}}</li>
+            </ul>
+          </div>
+        </div>
       </div>
-    </div>
+    </Scroller>
     <div class="city-index">
       <ul>
         <li v-for="(cindex,index) in cityList" :key="cindex.index" @touchstart="handleSortCity(index)">{{cindex.index}}</li>
@@ -29,21 +34,33 @@ export default {
     data(){
       return {
         cityList: [],
-        hotList: []
+        hotList: [],
+        isLoading: true
       }
     },
     mounted(){
-      this.axios({
-        url: 'https://m.maizuo.com/gateway?k=9271004',
-        headers: {
-         'X-Client-Info': '{"a":"3000","ch":"1002","v":"5.0.4","e":"15653786341017907249395"}',
-         'X-Host': 'mall.film-ticket.city.list',
-        }
-      }).then(res => {
-        let {cityList,hotList} = this.formatCity(res.data.data.cities)
-        this.cityList = cityList
-        this.hotList = hotList
-      })
+      let cityList = window.localStorage.getItem('cityList')
+      let hotList = window.localStorage.getItem('hotList')
+      if(cityList && hotList){
+        this.cityList = JSON.parse(cityList)
+        this.hotList = JSON.parse(hotList)
+        this.isLoading = false
+      }else{
+        this.axios({
+          url: 'https://m.maizuo.com/gateway?k=9271004',
+          headers: {
+          'X-Client-Info': '{"a":"3000","ch":"1002","v":"5.0.4","e":"15653786341017907249395"}',
+          'X-Host': 'mall.film-ticket.city.list',
+          }
+        }).then(res => {
+          let {cityList,hotList} = this.formatCity(res.data.data.cities)
+          this.cityList = cityList
+          this.hotList = hotList
+          this.isLoading = false
+          window.localStorage.setItem('cityList',JSON.stringify(cityList))
+          window.localStorage.setItem('hotList',JSON.stringify(hotList))
+        })
+      }
     },
     methods: {
       formatCity(cities){
@@ -97,8 +114,14 @@ export default {
       },
       handleSortCity(index){
         let h2 = this.$refs.letter.getElementsByTagName('h2')
-        this.$refs.letter.parentNode.scrollTop = h2[index].offsetTop
-        console.log(this.$refs.letter.parentNode.scrollTop)
+        // this.$refs.letter.parentNode.scrollTop = h2[index].offsetTop
+        this.$refs.city_list.toScrollTop(h2[index].offsetTop)
+      },
+      handleToCity(name,id){
+        this.$store.commit('city/CITY_INFO',{name,id})
+        window.localStorage.setItem('nowNum',name)
+        window.localStorage.setItem('nowId',id)
+        this.$router.push('/movie/nowPlaying')
       }
     }
 }

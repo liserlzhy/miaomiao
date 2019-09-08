@@ -44,13 +44,14 @@ export default {
     },
     watch: {
       message(val){
+        let cityId = this.$store.state.city.id
         let that = this
         let reg = /^\s*$/
         if(reg.test(val)){
           this.movieList = []
         }else{
           this.cancelRequest()
-          this.axios.get('/ajax/search?kw='+val+ '&cityId=1&stype=-1',{
+          this.axios.get('/ajax/search?kw='+val+ '&cityId='+cityId+'&stype=-1',{
             cancelToken: new this.axios.CancelToken(function(c){
               that.source = c
             })

@@ -4,7 +4,7 @@
         <div id="content">
           <div class="movie_menu">
             <router-link tag="div" to="/movie/city" class="city_name">
-              <span>大连</span><i class="iconfont icon-jiantou 
+              <span>{{ $store.state.city.name }}</span><i class="iconfont icon-jiantou 
 "></i>
             </router-link>
             <div class="hot_switch">
@@ -26,17 +26,39 @@
 <script>
 import Header from '@/components/Header'
 import NavBar from '@/components/NavBar'
+import { messageBox } from '@/components/JS'
+
 export default {
   name: 'Movie',
   components: {
     Header,
-    NavBar
+    NavBar,
+  },
+  mounted(){
+    // this.axios({
+    //   url: 'https://m.maizuo.com/gateway?k=9271004',
+    //   headers: {
+    //     'X-Client-Info': '{"a":"3000","ch":"1002","v":"5.0.4","e":"15653786341017907249395"}',
+    //     'X-Host': 'mall.film-ticket.city.list',
+    //   }
+    // }).then(res => {
+    //   messageBox({
+    //     title: '定位',
+    //     content: '北京',
+    //     cancel: '取消',
+    //     ok: '切换定位',
+    //     handleOk(){
+    //       // console.log(2)
+    //     }
+    //   })
+    // })
   }
 }
 </script>
 
 <style scoped lang="scss">
   .movie_menu {
+    height: 50px;
     line-height: 50px;
     padding: 0 10px;
     font-size: 18px;

@@ -1,9 +1,9 @@
 <template>
   <div>
       <Header title="喵喵影院"></Header>
-      <div id="content">
-          <Clist />
-      </div>
+      <keep-alive>
+        <Clist />
+      </keep-alive>
       <NavBar></NavBar>
   </div>
 </template>

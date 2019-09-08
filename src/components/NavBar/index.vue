@@ -30,6 +30,7 @@ export default {
         margin: 0;
         padding: 0;
         width: 100%;
+        height: 50px;
         li {
             flex: 1;
             background-color: #fff;

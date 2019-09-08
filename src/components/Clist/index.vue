@@ -1,21 +1,24 @@
 <template>
-  <div>
-    <ul class="cinemaList">
-      <li v-for="item in cinemaList" :key="item.cinemaId" class="clearfix">
-        <div class="left">
-          <h2>{{item.name}}</h2>
-          <p>{{item.address}}</p>
-        </div>
-        <div class="right">
-          <div class="price">
-            <span class="yuan">¥&nbsp;</span>
-            <span class="num">{{item.lowPrice/100}}</span>
-            <span class="upon">&nbsp;起</span>
+  <div class="cinemaList">
+    <Loading v-if="isLoading" />
+    <Scroller v-else>
+      <ul>
+        <li v-for="item in cinemaList" :key="item.cinemaId" class="clearfix">
+          <div class="left">
+            <h2>{{item.name}}</h2>
+            <p>{{item.address}}</p>
           </div>
-          <span class="distance">距离未知</span>
-        </div>
-      </li>
-    </ul>
+          <div class="right">
+            <div class="price">
+              <span class="yuan">¥&nbsp;</span>
+              <span class="num">{{item.lowPrice/100}}</span>
+              <span class="upon">&nbsp;起</span>
+            </div>
+            <span class="distance">距离未知</span>
+          </div>
+        </li>
+      </ul>
+    </Scroller>
   </div>
 </template>
 
@@ -24,18 +27,25 @@ export default {
     name: 'Clist',
     data() {
       return {
-        cinemaList: []
+        cinemaList: [],
+        isLoading: false,
+        preCityId: -1
       }
     },
-    mounted(){
+    activated(){
+      let cityId = this.$store.state.city.id
+      if(this.preCityId === cityId) { return; }
+      this.isLoading = true
       this.axios({
-        url: 'https://m.maizuo.com/gateway?cityId=440300&ticketFlag=1&k=1919434',
+        url: 'https://m.maizuo.com/gateway?cityId='+cityId+'&ticketFlag=1&k=1919434',
         headers: {
           'X-Client-Info': '{"a":"3000","ch":"1002","v":"5.0.4","e":"15653786341017907249395"}',
           'X-Host': 'mall.film-ticket.cinema.list'
         }
       }).then(res => {
         this.cinemaList = res.data.data.cinemas
+        this.isLoading = false
+        this.preCityId = cityId
       })
     }
 }
