@@ -1,18 +1,21 @@
 <template>
   <div class="list">
-    <ul>
-      <li v-for="item in movieList" :key="item.filmId" class="clearfix">
-        <div class="pic_show"><img :src="item.poster" alt=""></div>
-        <div class="info">
-          <h2>{{item.name}}</h2>
-          <p>主演: {{item.actors | starFilter}}</p>
-          <p>上映日期: {{item.premiereAt | timeFilter(item.timeType)}}</p>
-        </div>
-        <div v-if="item.isPresale" class="btn_buy">
-          预购
-        </div>
-      </li>
-    </ul>
+    <Loading v-if="isLoading" />
+    <Scroller v-else>
+      <ul>
+        <li v-for="item in movieList" :key="item.filmId" class="clearfix">
+          <div class="pic_show"><img :src="item.poster" alt=""></div>
+          <div class="info">
+            <h2>{{item.name}}</h2>
+            <p>主演: {{item.actors | starFilter}}</p>
+            <p>上映日期: {{item.premiereAt | timeFilter(item.timeType)}}</p>
+          </div>
+          <div v-if="item.isPresale" class="btn_buy">
+            预购
+          </div>
+        </li>
+      </ul>
+    </Scroller>
   </div>
 </template>
 
@@ -21,18 +24,25 @@ export default {
     name: 'ComingSoon',
     data(){
       return {
-        movieList: []
+        movieList: [],
+        isLoading: true,
+        prevCityId : -1
       }
     },
-    mounted() {
+    activated() {
+      let cityId = this.$store.state.city.id
+      if(this.prevCityId === cityId) { return; }
+      this.isLoading = true
       this.axios({
-        url: 'https://m.maizuo.com/gateway?cityId=110100&pageNum=1&pageSize=10&type=2&k=9540006',
+        url: 'https://m.maizuo.com/gateway?cityId='+cityId+'&pageNum=1&pageSize=10&type=2&k=9540006',
         headers: {
           'X-Client-Info': '{"a":"3000","ch":"1002","v":"5.0.4","e":"15653786341017907249395"}',
           'X-Host': 'mall.film-ticket.film.list'
         }
       }).then(res => {
           this.movieList = res.data.data.films
+          this.isLoading = false
+          this.prevCityId = cityId
         })
     }
 }
@@ -44,7 +54,9 @@ export default {
     width: 100%;
     height: calc(100% - 150px);
     overflow: auto;
-    padding-bottom: 70px;
+  }
+  ul {
+    padding-bottom: 20px;
   }
   li {
      height: 94px;

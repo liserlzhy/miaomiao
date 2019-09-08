@@ -4,6 +4,13 @@ import router from './routers'
 import store from './stores'
 
 import axios from 'axios'
+
+import Scroller from './components/Scroller'
+Vue.component('Scroller',Scroller)
+
+import Loading from './components/Loading'
+Vue.component('Loading',Loading)
+
 Vue.prototype.axios = axios;
 
 Vue.config.productionTip = false
@@ -28,7 +35,7 @@ Vue.filter('timeFilter',(data,arg)=>{
 Vue.filter('imageFilter',(data,arg)=>{
   return data.replace(/w\.h/,arg)
 })
-
+// runtime模式
 new Vue({
   router,
   store,

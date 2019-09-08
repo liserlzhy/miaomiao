@@ -17,6 +17,7 @@ export default {
 
 <style scoped>
     #header {
+        height: 50px;
         line-height: 50px;
         background-color: #e73f3f;
         text-align: center;
